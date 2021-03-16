@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
@@ -25,14 +26,19 @@ namespace API.Data
         public async Task<AppUserDto> GetMyAccount()
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserById());
-            return _mapper.Map<AppUserDto>(user);
+            var mapped = _mapper.Map<AppUserDto>(user);
+            mapped.PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url;
+            return mapped;
         }
 
         public async Task<AppUserDto> GetUserByUserName(string userName)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
 
-            return _mapper.Map<AppUserDto>(user);
+            var mapped = _mapper.Map<AppUserDto>(user);
+            mapped.PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url;
+            return mapped;
+
         }
 
         public async Task<AppUserDto> UpdateUserInfo(AppUserDto newInfo)
@@ -63,10 +69,15 @@ namespace API.Data
             }
 
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync() > 0;
 
-            return _mapper.Map<AppUserDto>(user);
+            var mapped = _mapper.Map<AppUserDto>(user);
+            
+            mapped.PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url;
 
+            if (result) return mapped;
+
+            return null;
         }
     }
 }

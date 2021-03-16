@@ -11,6 +11,7 @@ namespace API.Dtos
         public string Work { get; set; }
         public string Address { get; set; }  
         public List<PhotoDto> Photos { get; set; }
+        public string PPUrl { get; set; }
         
     }
 }

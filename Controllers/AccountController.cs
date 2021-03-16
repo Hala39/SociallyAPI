@@ -87,6 +87,9 @@ namespace API.Controllers
 
         private AccountDto CreateUserObject(AppUser user)
         {
+            var mappedPhotos = user.Photos.Select(p => _mapper.Map<PhotoDto>(p)).ToList();
+
+
             return new AccountDto
             {
                 Education = user.Education,
@@ -95,6 +98,8 @@ namespace API.Controllers
                 Address = user.Address,
                 UserName = user.UserName,
                 Token = _token.CreateToken(user),
+                Photos = mappedPhotos,
+                PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url
             };
         }
 
