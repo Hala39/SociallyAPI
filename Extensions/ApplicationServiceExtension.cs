@@ -1,7 +1,10 @@
 using API.Data;
 using API.Helpers;
 using API.Interfaces;
+using API.MediatR.Comments;
 using API.Services;
+using API.SignalR;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,11 +28,17 @@ namespace API.Extensions
                 x.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<PresenceTracker>();
+
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUserService>();
             
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddSignalR();
+            
             return services;
         }
     }

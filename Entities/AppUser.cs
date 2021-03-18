@@ -10,6 +10,8 @@ namespace API.Entities
         public string Education { get; set; }
         public string Work { get; set; }
         public string Address { get; set; }
+        virtual public ICollection<UserFollowing> Followings { get; set; }
+        virtual public ICollection<UserFollowing> Followers { get; set; }
         
     }
 }

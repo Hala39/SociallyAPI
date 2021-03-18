@@ -1,11 +1,10 @@
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Dtos;
 using API.Interfaces;
+using API.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper.QueryableExtensions;
 
 namespace API.Data
 {
@@ -13,38 +12,37 @@ namespace API.Data
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserRepo(DataContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IUserService _userService;
+        public UserRepo(DataContext context, IMapper mapper, IUserService userService)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
             _mapper = mapper;
             _context = context;
         }
 
-        public string GetUserById() => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
         public async Task<AppUserDto> GetMyAccount()
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserById());
-            var mapped = _mapper.Map<AppUserDto>(user);
-            mapped.PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url;
-            return mapped;
+            var user = await _context.Users
+                .ProjectTo<AppUserDto>(_mapper.ConfigurationProvider, new {currentUserName = _userService.GetUserName()})
+                .FirstOrDefaultAsync(u => u.UserName == _userService.GetUserName());
+             return user;
         }
 
         public async Task<AppUserDto> GetUserByUserName(string userName)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            var user = await _context.Users
+                .ProjectTo<AppUserDto>(_mapper.ConfigurationProvider, new {currentUserName = _userService.GetUserName()})
+                .FirstOrDefaultAsync(u => u.UserName == userName);
 
-            var mapped = _mapper.Map<AppUserDto>(user);
-            mapped.PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url;
-            return mapped;
+            return user;
 
         }
 
         public async Task<AppUserDto> UpdateUserInfo(AppUserDto newInfo)
         {
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserById());
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserName == _userService.GetUserName());
 
             if (user == null)
             {
@@ -69,11 +67,12 @@ namespace API.Data
             }
 
             _context.Users.Update(user);
+            
             var result = await _context.SaveChangesAsync() > 0;
 
-            var mapped = _mapper.Map<AppUserDto>(user);
-            
-            mapped.PPUrl = user.Photos.FirstOrDefault(p => p.IsMain == true).Url;
+            var mapped = await _context.Users
+                .ProjectTo<AppUserDto>(_mapper.ConfigurationProvider, new {currentUserName = _userService.GetUserName()})
+                .FirstOrDefaultAsync(u => u.UserName == _userService.GetUserName());
 
             if (result) return mapped;
 

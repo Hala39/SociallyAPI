@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="automapper.extensions.microsoft.dependencyInjection" Version="8.1.1" />
     <PackageReference Include="CloudinaryDotNet" Version="1.15.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.3" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="microsoft.aspnetcore.authentication.jwtbearer" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="microsoft.entityFrameworkCore.Design" Version="5.0.4">

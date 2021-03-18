@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "WgeBmllrKC51gsazQydvfe4fLefbi4//EmnMIc/uO7Yry9Jrj6kysfgr506XOtAsF05JaGBkxmFog1ix727eoA==",
+  "dgSpecHash": "dNdeCpDsUnpLJ2IA8JDyPSqBFiXvdv8vTe2bl5/vWPOQ4fBw+SIegI7qeh6qIuEjfFpGh9w7mwkoRLi0vL6ljg==",
   "success": true,
   "projectFilePath": "C:\\Users\\pc.cc\\OneDrive\\Desktop\\Social\\API\\API.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,12 @@
     "C:\\Users\\pc.cc\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
     "C:\\Users\\pc.cc\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\pc.cc\\.nuget\\packages\\cloudinarydotnet\\1.15.0\\cloudinarydotnet.1.15.0.nupkg.sha512",
+    "C:\\Users\\pc.cc\\.nuget\\packages\\fluentvalidation\\9.5.3\\fluentvalidation.9.5.3.nupkg.sha512",
+    "C:\\Users\\pc.cc\\.nuget\\packages\\fluentvalidation.aspnetcore\\9.5.3\\fluentvalidation.aspnetcore.9.5.3.nupkg.sha512",
+    "C:\\Users\\pc.cc\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\9.5.3\\fluentvalidation.dependencyinjectionextensions.9.5.3.nupkg.sha512",
     "C:\\Users\\pc.cc\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\pc.cc\\.nuget\\packages\\mediatr\\9.0.0\\mediatr.9.0.0.nupkg.sha512",
+    "C:\\Users\\pc.cc\\.nuget\\packages\\mediatr.extensions.microsoft.dependencyinjection\\9.0.0\\mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
     "C:\\Users\\pc.cc\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.4\\microsoft.aspnetcore.authentication.jwtbearer.5.0.4.nupkg.sha512",
     "C:\\Users\\pc.cc\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\5.0.4\\microsoft.aspnetcore.cryptography.internal.5.0.4.nupkg.sha512",
     "C:\\Users\\pc.cc\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\5.0.4\\microsoft.aspnetcore.cryptography.keyderivation.5.0.4.nupkg.sha512",

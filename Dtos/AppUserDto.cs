@@ -12,6 +12,10 @@ namespace API.Dtos
         public string Address { get; set; }  
         public List<PhotoDto> Photos { get; set; }
         public string PPUrl { get; set; }
+        public string CoverUrl { get; set; }
+        public bool Following { get; set; }
+        public int FollowingCount { get; set; }
+        public int FollowersCount { get; set; }
         
     }
 }
