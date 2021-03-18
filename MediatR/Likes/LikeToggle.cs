@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using API.Data;
@@ -7,14 +6,13 @@ using API.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.MediatR.Followers
+namespace API.MediatR.Likes
 {
-    public class FollowToggle
+    public class LikeToggle
     {
         public class Command : IRequest<Unit>
         {
-            public string TargetUserName { get; set; }
-
+            public int PhotoId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -29,36 +27,32 @@ namespace API.MediatR.Followers
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var observer = await _context.Users.FirstOrDefaultAsync(u => 
-                    u.Id == _userService.GetUserId());
+                var liker = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userService.GetUserName());
+                var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == request.PhotoId);
 
-                var target = await _context.Users.FirstOrDefaultAsync(u 
-                    => u.UserName == request.TargetUserName);
+                if (photo == null) return Unit.Value;
+                
+                var like = await _context.Likes.FindAsync(liker.Id, photo.Id);
 
-                if(target == null) return Unit.Value;
-
-                var following = await _context.UserFollowings.FindAsync(observer.Id, target.Id);
-
-                if (following == null) 
+                if (like == null)
                 {
-                    following = new UserFollowing
+                    like = new Like
                     {
-                        Observer = observer,
-                        Target = target
+                        AppUser = liker,
+                        Photo = photo
                     };
 
-                    await _context.UserFollowings.AddAsync(following);
+                    await _context.Likes.AddAsync(like);
                 }
                 else 
                 {
-                    _context.UserFollowings.Remove(following);
+                    _context.Likes.Remove(like);
                 }
 
                 await _context.SaveChangesAsync();
-
                 return Unit.Value;
-
             }
         }
+    
     }
-}
+}           

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210317234308_initial")]
+    [Migration("20210318041251_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,6 +124,21 @@ namespace API.Migrations
                     b.HasIndex("PhotoId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("API.Entities.Like", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PhotoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "PhotoId");
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("API.Entities.Photo", b =>
@@ -323,6 +338,25 @@ namespace API.Migrations
                     b.Navigation("Photo");
                 });
 
+            modelBuilder.Entity("API.Entities.Like", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "AppUser")
+                        .WithMany("LikedPhotos")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Photo", "Photo")
+                        .WithMany("Likers")
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Photo");
+                });
+
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "AppUser")
@@ -408,12 +442,16 @@ namespace API.Migrations
 
                     b.Navigation("Followings");
 
+                    b.Navigation("LikedPhotos");
+
                     b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Likers");
                 });
 #pragma warning restore 612, 618
         }

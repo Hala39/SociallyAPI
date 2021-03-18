@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using AutoMapper;
@@ -22,14 +23,16 @@ namespace API.Data
             _context = context;
         }
 
-        public async Task<List<PhotoDto>> GetPhotos()
+        public async Task<PagedList<PhotoDto>> GetPhotos(PhotoParams photoParams)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userService.GetUserId());
-            var photos = await _context.Photos
+            var query = _context.Photos
                 .ProjectTo<PhotoDto>(_mapper.ConfigurationProvider, new { currentUserName = user.UserName})
-                .ToListAsync();
+                .OrderByDescending(p => p.Following)
+                .OrderBy(p => p.Time)
+                .AsNoTracking();
 
-            return photos;
+            return await PagedList<PhotoDto>.CreateAsync(query, photoParams.PageNumber, photoParams.PageNumber);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using API.Entities;
 
@@ -16,6 +17,8 @@ namespace API.Dtos
         public bool Following { get; set; }
         public int FollowingCount { get; set; }
         public int FollowersCount { get; set; }
+        public DateTime LastActive { get; set; }
+        public ICollection<PhotoDto> LikedPhotos { get; set; }
         
     }
 }

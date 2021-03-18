@@ -25,11 +25,18 @@ namespace API.Extensions
                 .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count));
 
             CreateMap<Photo, PhotoDto>()
-                .ForMember(d => d.Following, o => o.MapFrom(s => s.AppUser.Followers.Any(x => x.Observer.UserName == currentUserName)));
+                .ForMember(d => d.Following, o => o.MapFrom(s => s.AppUser.Followers.Any(x => x.Observer.UserName == currentUserName)))
+                .ForMember(d => d.Liked, o => o.MapFrom(d => d.Likers.Any(x => x.AppUser.UserName == currentUserName)))
+                .ForMember(d => d.LikesCount, o => o.MapFrom(s => s.Likers.Count));
                 
             CreateMap<Comment, CommentDto>()
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(p => p.IsMain == true).Url));
+
+            CreateMap<Message, MessageDto>()
+                .ForMember(d => d.SenderPhotoUrl, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain == true).Url))
+                .ForMember(d => d.RecipientPhotoUrl, o => o.MapFrom(s => s.Recipient.Photos.FirstOrDefault(x => x.IsMain == true).Url));
+
 
         }
     }

@@ -14,5 +14,7 @@ namespace API.Entities
         public DateTime Time { get; set; } = DateTime.UtcNow;
         virtual public AppUser AppUser { get; set; }
         virtual public ICollection<Comment> Comments { get; set; }
+        virtual public ICollection<Like> Likers { get; set; }
+        
     }
 }

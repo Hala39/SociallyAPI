@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using API.Data;
 using API.Dtos;
 using API.Entities;
+using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using AutoMapper;
@@ -19,12 +21,23 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
-        public PhotoController(DataContext context, IMapper mapper, IUserService userService, IPhotoService photoService)
+        private readonly IPhotoRepo _repo;
+        public PhotoController(DataContext context, IMapper mapper, IUserService userService, IPhotoService photoService, IPhotoRepo repo)
         {
+            _repo = repo;
             _userService = userService;
             _photoService = photoService;
             _mapper = mapper;
             _context = context;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPhotos([FromQuery] PhotoParams photoParams)
+        {
+            var photos = await _repo.GetPhotos(photoParams);
+
+            Response.AddPaginationHeader(photos.CurrentPage, photos.PageSize, photos.TotalCount, photos.TotalPages);
+            return Ok(photos);
         }
 
         [HttpPost("add-photo")]

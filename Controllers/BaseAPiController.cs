@@ -1,9 +1,11 @@
+using API.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [ApiController]
     [Route("api/[Controller]")]
     public class BaseAPiController : ControllerBase
@@ -12,5 +14,6 @@ namespace API.Controllers
 
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
             .GetService<IMediator>();
+
     }
 }

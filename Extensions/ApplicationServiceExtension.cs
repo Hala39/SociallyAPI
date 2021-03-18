@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 
 namespace API.Extensions
@@ -33,7 +32,9 @@ namespace API.Extensions
 
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IMessageRepo, MessageRepo>();
             services.AddScoped<IUserService>();
+            services.AddScoped<LogUserActivity>();
             
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddMediatR(typeof(List.Handler).Assembly);

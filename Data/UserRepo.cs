@@ -28,6 +28,12 @@ namespace API.Data
              return user;
         }
 
+        public async Task<AppUserDto> GetUserByIdAsync(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            return _mapper.Map<AppUserDto>(user);
+        }
+
         public async Task<AppUserDto> GetUserByUserName(string userName)
         {
             var user = await _context.Users
@@ -77,6 +83,11 @@ namespace API.Data
             if (result) return mapped;
 
             return null;
+        }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
