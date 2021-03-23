@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,18 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateUserInfo(AppUserDto newInfo)
         {
             return Ok(await _repo.UpdateUserInfo(newInfo));
+        }
+
+        [HttpGet("users")]
+        public async Task<IActionResult> SearchUsers([FromQuery] UserParams userParams)
+        {
+            return Ok(await _repo.SearchUsers(userParams));
+        }
+
+        [HttpGet("contact")]
+        public async Task<IActionResult> GetContacts()
+        {
+            return Ok(await _repo.GetContacts());
         }
 
     }

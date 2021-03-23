@@ -31,13 +31,12 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPhotos([FromQuery] PhotoParams photoParams)
+        
+        [HttpGet("feed")]
+        public async Task<IActionResult> GetPosts()
         {
-            var photos = await _repo.GetPhotos(photoParams);
-
-            Response.AddPaginationHeader(photos.CurrentPage, photos.PageSize, photos.TotalCount, photos.TotalPages);
-            return Ok(photos);
+            var posts = await _repo.GetPosts();
+            return Ok(posts);
         }
 
         [HttpPost("add-photo")]

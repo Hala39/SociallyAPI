@@ -6,6 +6,7 @@ using API.Dtos;
 using API.Entities;
 using API.Helpers;
 using API.Interfaces;
+using API.Services;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,10 @@ namespace API.Data
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public MessageRepo(DataContext context, IMapper mapper)
+        private readonly IUserService _userService;
+        public MessageRepo(DataContext context, IMapper mapper, IUserService userService)
         {
+            _userService = userService;
             _mapper = mapper;
             _context = context;
         }
@@ -86,5 +89,6 @@ namespace API.Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+        
     }
 }

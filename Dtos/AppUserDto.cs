@@ -18,7 +18,6 @@ namespace API.Dtos
         public int FollowingCount { get; set; }
         public int FollowersCount { get; set; }
         public DateTime LastActive { get; set; }
-        public ICollection<PhotoDto> LikedPhotos { get; set; }
         
     }
 }

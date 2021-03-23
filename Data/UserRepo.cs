@@ -5,6 +5,11 @@ using API.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using System.Collections.Generic;
+using System;
+using System.Linq;
+using API.Helpers;
+using API.Entities;
 
 namespace API.Data
 {
@@ -84,10 +89,60 @@ namespace API.Data
 
             return null;
         }
+        
+        public async Task<PagedList<AppUserDto>> SearchUsers(UserParams userParams)
+        {   
+            var query = _context.Users
+            .ProjectTo<AppUserDto>(_mapper.ConfigurationProvider, new {currentUserName = _userService.GetUserName()})
+            .Where(u => u.UserName.ToLower().Contains(userParams.SearchString.ToLower())
+                    || u.Bio.ToLower().Contains(userParams.SearchString.ToLower())).AsNoTracking();
+            
+
+            return await PagedList<AppUserDto>.CreateAsync(query, userParams.PageNumber, userParams.PageNumber);
+        }
 
         public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<List<Contact>> GetContacts() 
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userService.GetUserId());
+            var followings = await _context.UserFollowings.Where(u => u.ObserverId == user.Id).Select(u => u.Target).ToListAsync();
+            var followers = await _context.UserFollowings.Where(u => u.TargetId == user.Id).Select(u => u.Observer).ToListAsync();
+            var contacts = new List<AppUser>();
+
+            if (followings != null) 
+            {
+                foreach (var item in followings)
+                {
+                    if (!contacts.Contains(item))
+                    {
+                        contacts.Add(item); 
+                    }
+                }
+            }
+
+            if (followers != null) 
+            {
+                foreach (var item in followers)
+                {
+                    if (!contacts.Contains(item))
+                    {
+                        contacts.Add(item); 
+                    }
+                }
+            }
+
+            contacts.Remove(user);
+
+            var mapped = contacts.Select(u => _mapper.Map<Contact>(u)).ToList();
+
+            return mapped;
+            
+        }
+    
     }
+
 }

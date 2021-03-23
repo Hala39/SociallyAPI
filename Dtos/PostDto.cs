@@ -1,11 +1,9 @@
-
-
 using System;
 using System.Collections.Generic;
 
 namespace API.Dtos
 {
-    public class PhotoDto
+    public class PostDto
     {
         public int Id { get; set; }
         public string Url { get; set; }
@@ -16,5 +14,9 @@ namespace API.Dtos
         public int LikesCount { get; set; }
         public bool Liked { get; set; }
         public ICollection<CommentDto> Comments {get; set; }
+        public string UserName { get; set; }
+        public string UserPPUrl { get; set; }
+        
+        
     }
 }

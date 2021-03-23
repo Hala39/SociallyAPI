@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using API.Services;
@@ -23,16 +24,19 @@ namespace API.Data
             _context = context;
         }
 
-        public async Task<PagedList<PhotoDto>> GetPhotos(PhotoParams photoParams)
+        public async Task<List<PostDto>> GetPosts()
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userService.GetUserId());
-            var query = _context.Photos
-                .ProjectTo<PhotoDto>(_mapper.ConfigurationProvider, new { currentUserName = user.UserName})
-                .OrderByDescending(p => p.Following)
-                .OrderBy(p => p.Time)
-                .AsNoTracking();
+            var posts = await _context.Photos
+            .ProjectTo<PostDto>(_mapper.ConfigurationProvider, new { currentUserName = _userService.GetUserName()})
+            .OrderBy(p => p.Following)
+            .OrderBy(p => p.Time)
+            .AsNoTracking()
+            .ToListAsync();
 
-            return await PagedList<PhotoDto>.CreateAsync(query, photoParams.PageNumber, photoParams.PageNumber);
+            return posts;
         }
     }
 }
+
+// .Where(u => u.UserName.ToLower().Contains(userParams.SearchString.ToLower())
+//                     || u.Bio.ToLower().Contains(userParams.SearchString.ToLower()))
