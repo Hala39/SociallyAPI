@@ -64,8 +64,7 @@ namespace API
 
             app.UseRouting();
 
-            app.UseCors(x => 
-                x.AllowAnyHeader()
+            app.UseCors(x => x.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
                 .WithOrigins("https://localhost:4200"));
@@ -78,7 +77,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<PresenceHub>("hubs/presence");
-                endpoints.MapHub<CommentHub>("hubs/comment");
+                endpoints.MapHub<MessageHub>("hubs/message");
 
             });
         }

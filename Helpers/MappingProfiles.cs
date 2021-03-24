@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using API.Dtos;
 using API.Entities;
@@ -49,6 +50,9 @@ namespace API.Extensions
 
             CreateMap<UserFollowing, Contact>()
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.Target.UserName));
+
+            CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d ,DateTimeKind.Utc));
+
         }
     }
 }

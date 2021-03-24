@@ -143,6 +143,11 @@ namespace API.Data
             
         }
     
+        public async Task<AppUser> GetUserByUsernameAsync(string userName)
+        {
+            return await _context.Users
+                .SingleOrDefaultAsync(x => x.UserName == userName);
+        }
     }
 
 }
